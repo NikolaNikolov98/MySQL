@@ -1,0 +1,229 @@
+drop database if exists hipermarket;
+create database hipermarket ;
+use  hipermarket;
+ 
+create table department(
+id int auto_increment primary key,
+name varchar (222) not null
+);
+
+insert into  department (id, name) values (1,'plasment');
+insert into  department (id, name) values (2,'sales');
+insert into  department (id, name) values (3,'finansi');
+insert into  department (id, name) values (4,'snabdqvane');
+
+/*Създадена е тблица department с първичен ключ и име с ограничение not null което означава, че за името трява да има задължително стойност */
+/* insert into  се използва за добавяне на данни за отделите   */
+
+create table employee(
+id int auto_increment primary key,
+name varchar (222)  not null,
+month_salary int  not null,
+department_id int ,
+constraint foreign key (department_id )references department(id) );
+
+insert into  employee ( name,month_salary,department_id) values ('Ivan Ivanov',550,1);
+insert into  employee ( name,month_salary,department_id) values ('Georgi Nikolov',620,1);
+insert into  employee ( name,month_salary,department_id) values ('Viktor Stoqnov',700,2);
+insert into  employee ( name,month_salary,department_id) values ('Dimitar Ivanov',720,2);
+insert into  employee ( name,month_salary,department_id) values ('Plamen Nikolov',820,3);
+insert into  employee ( name,month_salary,department_id) values ('Todor Nikolov',550,3);
+insert into  employee ( name,month_salary,department_id) values ('Rumen Cvetkov',660,4);
+insert into  employee (name,month_salary,department_id) values ('Plamen Nikolov',520,4);
+
+/*Създадена е тблица employee с първичен ключ и полета  с ограничение not null което означава, че за името трява да има задължително стойност */
+/* Има външен ключ-department_id, който сочи към първичния на таблица  department */
+/* insert into  се използва за добавяне на данни за полетата   */
+
+create table manager(
+id int auto_increment primary key,
+name varchar (222) not null,
+department_id int,
+constraint foreign key (department_id )references department(id) 	
+);
+insert into  manager (id, name,department_id) values (1,'Pier Ivanov',1);
+insert into  manager (id, name,department_id) values (2,'Mario Dobrinov',2);
+insert into  manager (id, name,department_id) values (3,'Stivan Nikolov',3);
+insert into  manager (id, name,department_id) values (4,'Hristian Todorov',4);
+
+/*Създадена е тблица manager с първичен ключ и полета  с ограничение not null което означава, че за името трява да има задължително стойност */
+/* Има външен ключ-department_id, който сочи към първичния на таблица  department */
+
+create table product(
+id int auto_increment primary key,
+name varchar(222) not null,
+price decimal(3,2)  not null,
+srok_godnost date not null
+);
+insert into  product (name ,  price,srok_godnost  ) values ('water',1.5,'2022-05-05');
+insert into  product (name ,  price,srok_godnost  ) values ('bread',1.20,'2019-06-05');
+insert into  product (name ,price,srok_godnost  ) values ('apple'	,2,'2019-06-06');
+insert into  product (name ,  price,srok_godnost  ) values ('juice',2.20,'2021-04-05');
+insert into  product (name ,  price,srok_godnost  ) values ('fish' ,6,'2019-03-05');
+insert into  product (name ,price,srok_godnost  ) values ('milk',1.40,'2020-09-05');
+insert into  product (name ,  price,srok_godnost  ) values ('sugar',1.5,'2025-05-05');
+insert into  product (name ,  price,srok_godnost  ) values ('egg',0.25,'2019-07-22');
+insert into  product (name ,price,srok_godnost  ) values ('bananas',2,'2019-03-05');
+ /*Създадена е тблица product с първичен ключ и полета  с ограничение not null 
+което означава, че за полетата трява да има задължително стойност */
+
+create table proizvoditel(
+id int auto_increment primary key,
+name varchar(222) not null,
+city varchar(222) not null,
+departmant_id int
+);
+insert into  proizvoditel (id,name ,city,departmant_id ) values (1, 'manufacturer1','Sofia',1);
+insert into  proizvoditel (id,name ,city, departmant_id) values (2, 'manufacturer2','Pleven',2);
+insert into  proizvoditel (id,name ,city, departmant_id) values (3, 'manufacturer3','Vidin',3);
+
+create table product_pro(
+product_id int ,
+proizvoditel_id int ,
+constraint foreign key (product_id )references product(id) ,
+constraint foreign key (proizvoditel_id )references proizvoditel(id)	);
+ 
+insert into  product_pro (product_id,proizvoditel_id   ) values (1, 1);
+insert into  product_pro (product_id,proizvoditel_id   ) values (4, 1);
+insert into  product_pro (product_id,proizvoditel_id   ) values (7, 1);
+insert into  product_pro (product_id,proizvoditel_id   ) values (2, 2);
+insert into  product_pro (product_id,proizvoditel_id   ) values (5, 3);
+insert into  product_pro (product_id,proizvoditel_id   ) values (8, 2);
+
+
+insert into  product_pro (product_id,proizvoditel_id   ) values (3, 3);
+insert into  product_pro (product_id,proizvoditel_id   ) values (6, 3);
+insert into  product_pro (product_id,proizvoditel_id   ) values (9, 3);
+/*  product_pro  е свързваща таблица, свързва таблица product с таблица  proizvoditel ,защото връзката между тях е много към много  */ 
+/* Има 2 външни ключа-product_id  и proizvoditel_id, който сочат към първичните на таблици  product и  proizvoditel    */
+ 
+create table provider(
+id  int auto_increment primary key,
+name varchar(222) not null,
+product_id int ,
+constraint foreign key (product_id )references product(id) ,
+department_id int ,
+constraint foreign key (department_id )references department(id) 
+);
+insert into  provider (name, product_id,department_id ) values ( 'provider1',4,1);
+insert into  provider (name, product_id,department_id) values ( 'provider2',2,1);
+insert into  provider (name,  product_id,department_id) values ( 'provider3',3,1);
+/*Създадена е тблица provider с първичен ключ и поле  с ограничение not null което означава, че за полето трява да има задължително стойност */
+/* Има външен ключ-product_id, който сочи към първичния на таблица  product */
+ /* Има външен ключ-department_id, който сочи към първичния на таблица  department */
+
+create table pr_provider(
+proizvoditel_id int,
+provider_id int,
+constraint foreign key (proizvoditel_id )references proizvoditel(id),
+constraint foreign key (provider_id )references provider(id) 		);
+insert into  pr_provider (proizvoditel_id, provider_id ) values (1,1);
+insert into  pr_provider (proizvoditel_id, provider_id ) values ( 2,2);
+insert into  pr_provider (proizvoditel_id, provider_id ) values ( 2,1);
+insert into  pr_provider (proizvoditel_id,  provider_id) values ( 3,3);
+
+/*  pr_provider  е свързваща таблица, свързва таблица proizvoditel   с таблица  provider  */ 
+/* променливите proizvoditel_id и provider_id на таблицата не са първични ключове,за да може един произведител да произвежда повече от една стока*/
+/* Има 2 външни ключа-proizvoditel_id  и provider_id, който сочат към първичните на таблици  proizvoditel и  provider    */
+
+/*2*/
+select department.name as otdel,manager.name as NameManager
+from department  join manager
+where department.id=manager.department_id
+and  department.name like '%plasment%' ;
+/*Заявка  с  ограничаващо  условие, при която при подадено
+ име на отдел се извежда неговия мениджър*/
+/*3*/
+select proizvoditel.id, proizvoditel.name as proizveditel,sum(product.price) 
+ from product join proizvoditel
+on product.id in (
+select product_id 
+from product_pro
+where product_pro.proizvoditel_id=proizvoditel.id)
+group by proizvoditel.id;
+/*  Заявка, в която е използвана  агрегатната функц. sum и GROUP BY 
+Използван е вложен селект за да се ппремине през свързващата таблица product_pro*/
+/*4*/
+select proizvoditel.name as proizveditel ,provider.name as dostavchik,
+product.name as product,product.price
+from proizvoditel  left join provider
+on proizvoditel.id in (
+select proizvoditel_id
+from pr_provider
+where provider.id = pr_provider.provider_id
+)join product 
+on product.id=provider.product_id;
+
+/* Заявка при която се демонстрира INNER и OUTER JOIN като се използва вложен селект,
+ за да се премине през свързващата таблица pr_provider
+ извежда се информация за произведителя ,продукта който произвежда с неговата цена */
+
+/*5*/
+select department.name as otdel, employee.name  as employee,sum(employee.month_salary) as SalaryOtdel
+from department join employee 
+where employee.department_id=department.id
+group by  department.name
+having   SalaryOtdel>(select avg(employee.month_salary)
+from employee);
+
+/*  Заявка при която е използан JOIN и агрегатна функ. sum за заплатата на персонала в даден отдел*/
+
+/*създадена е процедура с един параметър от тип IN
+'деклариран е курсор чрез, който се обхождат служителите  */
+/*има деклариран  handler за улавяне на грешки,  създадена е временна таблица в която е записана информацията получена при обхождане на курсора  */
+drop procedure if exists  department;
+ delimiter /
+create procedure department ( in x varchar(225))
+begin
+
+declare finished int;
+declare empl_name  varchar(225);
+declare empl_Salary int;
+declare empl_department varchar(225);
+
+ declare  cursorrr cursor  for  
+select employee.name ,employee.month_salary,department.name   as otdel
+from employee  join department
+where employee.department_id =department.id
+ and  department.name  like x;
+ declare continue handler for not found set finished =1;
+
+drop table if exists departmentss;
+ create temporary table departmentss(
+  id int auto_increment primary key,
+   employee_name  varchar(225),
+  employee_Salary int,
+   employee_department varchar(225)
+);
+    set  finished=0;
+open cursorrr;
+star: 
+while (finished=0)
+do
+fetch cursorrr  into empl_name, empl_Salary, empl_department;
+if(finished = 1)
+then leave star;
+end if;
+insert into departmentss(employee_name  ,  employee_Salary  ,   employee_department  )
+select empl_name,empl_Salary,empl_department ;
+ end while;
+
+select departmentss.employee_name as EmplyoeeName,
+departmentss.employee_Salary as Salary ,
+departmentss.employee_department as otdel
+from departmentss;
+close cursorrr;
+
+set finished =0;
+SELECT 'Finished!';
+end;
+/
+delimiter /
+
+
+set @p='%plasment%';
+set @s='%sales%';
+set @f='%finansi%';
+set @sn='%snabdqvane%';
+
+call department(@f);
